@@ -1,81 +1,30 @@
-
 pipeline {
-    agent any
-
-    environment {
-        DOCKER_IMAGE = 'my-node-app'
-        DOCKER_TAG = 'latest'
-        PORT = '8084'
-        APP_PORT = '3000'
-    }
+    agent any 
 
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/veena1606/week5.git'
-            }
-        }
-
-        stage('Install Dependencies') {
+        stage('Build') {
             steps {
                 script {
-                    sh 'npm install'
+                    // Build your Docker image
+                    bat 'docker build -t my-nodejs-app .'
                 }
             }
         }
-
         stage('Test') {
             steps {
                 script {
-                    sh 'npm test'
+                    // Run tests here if you have any
+                    echo 'Running tests...'
                 }
             }
         }
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
-                }
-            }
-        }
-
-        stage('Run Docker Container') {
-            steps {
-                script {
-                    sh 'docker run -d -p ${PORT}:${APP_PORT} ${DOCKER_IMAGE}:${DOCKER_TAG}'
-                }
-            }
-        }
-
         stage('Deploy') {
             steps {
-                echo 'Deploying to production...'
-            }
-        }
-
-        stage('Clean Up') {
-            steps {
                 script {
-                    sh 'docker stop $(docker ps -q --filter ancestor=${DOCKER_IMAGE}:${DOCKER_TAG})'
-                    sh 'docker rm $(docker ps -a -q --filter ancestor=${DOCKER_IMAGE}:${DOCKER_TAG})'
+                    // Deploy your Docker image
+                    echo 'Deploying application...'
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'Cleaning up workspace.'
-            cleanWs()
-        }
-
-        success {
-            echo 'Build and Deployment succeeded.'
-        }
-
-        failure {
-            echo 'Build or Deployment failed.'
         }
     }
 }
