@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/shiv4j/week5.git'
+                git 'https://github.com/veena1606/week5.git'
             }
         }
 
