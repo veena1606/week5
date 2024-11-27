@@ -5,7 +5,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'my-node-app'
         DOCKER_TAG = 'latest'
-        PORT = '8083'
+        PORT = '8084'
         APP_PORT = '3000'
     }
 
